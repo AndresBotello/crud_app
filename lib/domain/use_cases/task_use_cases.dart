@@ -1,40 +1,44 @@
-import 'package:crud_app/data/repositories/task_repository.dart';
-import 'package:crud_app/domain/models/task.dart';
+import '../../data/repositories/task_repository.dart';
+import '../models/task.dart';
 
 class TaskUseCases {
   final TaskRepository _repository;
 
   TaskUseCases(this._repository);
 
-  List<Task> getAllTasks() {
+  Future<List<Task>> getAllTasks() {
     return _repository.getAllTasks();
   }
 
-  Task? getTaskById(String id) {
+  Future<Task?> getTaskById(String id) {
     return _repository.getTaskById(id);
   }
 
-  Task createTask(String nombre, String detalle) {
+  Future<Task> createTask(String nombre, String detalle) async {
     final task = Task(
       nombre: nombre,
       detalle: detalle,
       estado: TaskStatus.pendiente,
     );
-    _repository.addTask(task);
+    await _repository.addTask(task);
     return task;
   }
 
-  void updateTaskStatus(Task task, TaskStatus newStatus) {
+  Future<void> updateTaskStatus(Task task, TaskStatus newStatus) async {
     final updatedTask = task.copyWith(estado: newStatus);
-    _repository.updateTask(updatedTask);
+    await _repository.updateTask(updatedTask);
   }
 
-  void updateTaskDetails(Task task, String newNombre, String newDetalle) {
+  Future<void> updateTaskDetails(
+    Task task,
+    String newNombre,
+    String newDetalle,
+  ) async {
     final updatedTask = task.copyWith(nombre: newNombre, detalle: newDetalle);
-    _repository.updateTask(updatedTask);
+    await _repository.updateTask(updatedTask);
   }
 
-  void deleteTask(String id) {
-    _repository.deleteTask(id);
+  Future<void> deleteTask(String id) async {
+    await _repository.deleteTask(id);
   }
 }

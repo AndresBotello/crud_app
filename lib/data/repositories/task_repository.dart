@@ -1,32 +1,31 @@
-import 'package:crud_app/domain/models/task.dart';
+import 'package:crud_app/data/services/task_api_services.dart';
+
+import '../../domain/models/task.dart';
 
 class TaskRepository {
-  final List<Task> _tasks = [];
+  final TaskApiService _apiService = TaskApiService();
 
-  List<Task> getAllTasks() {
-    return List.from(_tasks);
+  Future<List<Task>> getAllTasks() async {
+    return await _apiService.getAllTasks();
   }
 
-  Task? getTaskById(String id) {
+  Future<Task?> getTaskById(String id) async {
     try {
-      return _tasks.firstWhere((task) => task.id == id);
+      return await _apiService.getTaskById(id);
     } catch (e) {
       return null;
     }
   }
 
-  void addTask(Task task) {
-    _tasks.add(task);
+  Future<void> addTask(Task task) async {
+    await _apiService.createTask(task);
   }
 
-  void updateTask(Task updatedTask) {
-    final index = _tasks.indexWhere((task) => task.id == updatedTask.id);
-    if (index != -1) {
-      _tasks[index] = updatedTask;
-    }
+  Future<void> updateTask(Task updatedTask) async {
+    await _apiService.updateTask(updatedTask);
   }
 
-  void deleteTask(String id) {
-    _tasks.removeWhere((task) => task.id == id);
+  Future<void> deleteTask(String id) async {
+    await _apiService.deleteTask(id);
   }
 }
