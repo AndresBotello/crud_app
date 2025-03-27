@@ -29,11 +29,15 @@ class TaskController extends GetxController {
     }
   }
 
-  Future<void> createTask(String nombre, String detalle) async {
+  Future<void> createTask(
+    String nombre,
+    String detalle,
+    TaskStatus estado,
+  ) async {
     isLoading.value = true;
     error.value = null;
     try {
-      await _taskUseCases.createTask(nombre, detalle);
+      await _taskUseCases.createTask(nombre, detalle, estado);
       await fetchTasks();
     } catch (e) {
       error.value = e.toString();
@@ -43,33 +47,39 @@ class TaskController extends GetxController {
     }
   }
 
-  Future<void> updateTaskStatus(Task task, TaskStatus newStatus) async {
+  Future<void> updateTask(
+    String id,
+    String nombre,
+    String detalle,
+    TaskStatus estado,
+  ) async {
     isLoading.value = true;
     error.value = null;
     try {
-      await _taskUseCases.updateTaskStatus(task, newStatus);
+      await _taskUseCases.updateTask(id, nombre, detalle, estado);
       await fetchTasks();
     } catch (e) {
       error.value = e.toString();
-      Get.snackbar('Error', 'No se pudo actualizar el estado');
+      Get.snackbar('Error', 'No se pudo actualizar la tarea');
     } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> updateTaskDetails(
-    Task task,
-    String newNombre,
-    String newDetalle,
-  ) async {
+  Future<void> updateTaskStatus(Task task, TaskStatus newStatus) async {
     isLoading.value = true;
     error.value = null;
     try {
-      await _taskUseCases.updateTaskDetails(task, newNombre, newDetalle);
+      await _taskUseCases.updateTask(
+        task.id!,
+        task.nombre,
+        task.detalle,
+        newStatus,
+      );
       await fetchTasks();
     } catch (e) {
       error.value = e.toString();
-      Get.snackbar('Error', 'No se pudieron actualizar los detalles');
+      Get.snackbar('Error', 'No se pudo actualizar el estado de la tarea');
     } finally {
       isLoading.value = false;
     }

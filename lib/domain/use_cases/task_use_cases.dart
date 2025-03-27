@@ -14,28 +14,24 @@ class TaskUseCases {
     return _repository.getTaskById(id);
   }
 
-  Future<Task> createTask(String nombre, String detalle) async {
-    final task = Task(
-      nombre: nombre,
-      detalle: detalle,
-      estado: TaskStatus.pendiente,
-    );
+  Future<Task> createTask(
+    String nombre,
+    String detalle,
+    TaskStatus estado,
+  ) async {
+    final task = Task(nombre: nombre, detalle: detalle, estado: estado);
     await _repository.addTask(task);
     return task;
   }
 
-  Future<void> updateTaskStatus(Task task, TaskStatus newStatus) async {
-    final updatedTask = task.copyWith(estado: newStatus);
-    await _repository.updateTask(updatedTask);
-  }
-
-  Future<void> updateTaskDetails(
-    Task task,
-    String newNombre,
-    String newDetalle,
+  Future<void> updateTask(
+    String id,
+    String nombre,
+    String detalle,
+    TaskStatus estado,
   ) async {
-    final updatedTask = task.copyWith(nombre: newNombre, detalle: newDetalle);
-    await _repository.updateTask(updatedTask);
+    final task = Task(id: id, nombre: nombre, detalle: detalle, estado: estado);
+    await _repository.updateTask(task);
   }
 
   Future<void> deleteTask(String id) async {
